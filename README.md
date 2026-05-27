@@ -7,7 +7,7 @@ Personal configuration files for a Wayland desktop on Arch Linux.
 | Branch | Description |
 |--------|-------------|
 | `main` | Primary dotfiles |
-| `mina` | [Mina](https://github.com/blaszczyknorbert/Mina) branch, an Arch Linux pseudo-distribution, tracked as a submodule in the installer and may diverge from `main` |
+| `mina` | [Mina](https://github.com/blaszczyknorbert/mina) branch, an Arch Linux pseudo-distribution, tracked as a submodule in the installer and may diverge from `main` |
 
 ## What's included
 
