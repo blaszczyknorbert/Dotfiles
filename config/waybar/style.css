@@ -1,0 +1,37 @@
+* {
+    font-family: "JetBrainsMono Nerd Font Mono";
+    font-size: 13px;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+}
+
+window#waybar {
+    background-color: #222222;
+    color: #bbbbbb;
+}
+
+#tags button {
+    background-color: #222222;
+    color: #bbbbbb;
+    padding: 0 4px;
+}
+
+#tags button.focused {
+    background-color: #005577;
+    color: #eeeeee;
+}
+
+#tags button.urgent {
+    color: #770000;
+}
+
+#layout,
+#window,
+#custom-status {
+    background-color: #222222;
+    color: #bbbbbb;
+    padding: 0 6px;
+}

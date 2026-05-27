@@ -1,0 +1,11 @@
+[Unit]
+Description=Mina Update Check Timer
+Requires=mina-check-updates.service
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=6h
+AccuracySec=5min
+
+[Install]
+WantedBy=timers.target

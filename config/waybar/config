@@ -1,0 +1,20 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 20,
+    "spacing": 0,
+    "modules-left": ["river/tags", "river/layout", "river/window"],
+    "modules-right": ["custom/status"],
+    "river/tags": {
+        "num-tags": 9
+    },
+    "river/layout": {},
+    "river/window": {
+        "max-length": 60
+    },
+    "custom/status": {
+        "exec": "mina-status",
+        "format": "{}",
+        "tooltip": false
+    }
+}

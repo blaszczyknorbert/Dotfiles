@@ -1,0 +1,105 @@
+#!/bin/sh
+
+riverctl default-layout rivertile
+riverctl attach-mode bottom
+
+riverctl border-width 1
+riverctl border-color-focused    0x005577FF
+riverctl border-color-unfocused  0x444444FF
+riverctl border-color-urgent     0x770000FF
+
+riverctl set-repeat 25 600
+
+riverctl map normal Super         Return  spawn "foot"
+riverctl map normal Super         E       spawn "foot -e nvim"
+riverctl map normal Super         W       spawn "mina-menu-wifi"
+riverctl map normal Control+Shift Escape  spawn "foot -e htop"
+riverctl map normal Super+Shift   F       spawn "nautilus"
+riverctl map normal Super+Shift   D       spawn "mina-display"
+riverctl map normal Super         C       spawn "foot --app-id=float -e mina-menu clipboard"
+riverctl map normal Super+Shift   P       spawn "foot --app-id=float -e mina-menu pass"
+riverctl map normal Super         P       spawn "foot --app-id=float -e mina-menu apps"
+riverctl map normal Super         Print   spawn "foot --app-id=float -e mina-menu capture"
+riverctl map normal Super         Escape  spawn "foot --app-id=float -e mina-menu system"
+riverctl map normal Super         G       spawn "mina-ctl-power-cycle"
+riverctl map normal Super         B       spawn "firefox"
+riverctl map normal Super+Shift   B       spawn "pkill -SIGUSR1 waybar"
+
+riverctl map normal Super         Q       close
+riverctl map normal Super         J       focus-view next
+riverctl map normal Super         K       focus-view previous
+riverctl map normal Super+Shift   J       swap next
+riverctl map normal Super+Shift   K       swap previous
+riverctl map normal Super         H       send-layout-cmd rivertile "main-ratio -0.05"
+riverctl map normal Super         L       send-layout-cmd rivertile "main-ratio +0.05"
+riverctl map normal Super         Tab     focus-previous-tags
+riverctl map normal Super         F       toggle-float
+riverctl map normal Super+Shift   E       toggle-fullscreen
+riverctl map normal Super         T       send-layout-cmd rivertile "main-location left"
+
+riverctl map normal Super         Comma   focus-output next
+riverctl map normal Super         Period  focus-output previous
+riverctl map normal Super+Shift   Comma   send-to-output next
+riverctl map normal Super+Shift   Period  send-to-output previous
+
+for i in $(seq 1 9); do
+    tags=$((1 << (i - 1)))
+    riverctl map normal Super                "$i" set-focused-tags    $tags
+    riverctl map normal Super+Control        "$i" toggle-focused-tags $tags
+    riverctl map normal Super+Shift          "$i" set-view-tags       $tags
+    riverctl map normal Super+Control+Shift  "$i" toggle-view-tags    $tags
+done
+
+# All tags
+riverctl map normal Super         0          set-focused-tags 4294967295
+riverctl map normal Super+Shift   parenright set-view-tags    4294967295
+
+# Mouse
+riverctl map-pointer normal Super BTN_LEFT   move-view
+riverctl map-pointer normal Super BTN_MIDDLE toggle-float
+riverctl map-pointer normal Super BTN_RIGHT  resize-view
+
+# Media / function keys
+riverctl map normal None XF86MonBrightnessDown spawn "mina-ctl-brightness down"
+riverctl map normal None XF86MonBrightnessUp   spawn "mina-ctl-brightness up"
+riverctl map normal None XF86AudioPlay         spawn "mina-ctl-media play-pause"
+riverctl map normal None XF86AudioStop         spawn "mina-ctl-media stop"
+riverctl map normal None XF86AudioNext         spawn "mina-ctl-media next"
+riverctl map normal None XF86AudioPrev         spawn "mina-ctl-media prev"
+riverctl map normal None XF86AudioForward      spawn "mina-ctl-media forward"
+riverctl map normal None XF86AudioRewind       spawn "mina-ctl-media rewind"
+riverctl map normal None XF86AudioPause        spawn "mina-ctl-media play-pause"
+riverctl map normal None XF86AudioRaiseVolume  spawn "mina-ctl-volume up"
+riverctl map normal None XF86AudioLowerVolume  spawn "mina-ctl-volume down"
+riverctl map normal None XF86AudioMute         spawn "mina-ctl-volume mute"
+riverctl map normal None XF86AudioMicMute      spawn "mina-ctl-mic mute"
+riverctl map normal None Print                 spawn "mina-screenshot smart"
+
+# Quit
+riverctl map normal Super+Control+Alt Q exit
+
+# Float rules
+riverctl rule-add -app-id "float"                                               float
+riverctl rule-add -app-id "firefox" -title "Firefox — Sharing Indicator"       float
+riverctl rule-add -title "File Operation Progress"                              float
+riverctl rule-add -title "Open File"                                            float
+riverctl rule-add -title "Save As"                                              float
+
+# Touchpad
+for input in $(riverctl list-inputs | grep -i touchpad); do
+    riverctl input "$input" tap                  enabled
+    riverctl input "$input" tap-button-map       left-right-middle
+    riverctl input "$input" drag                 enabled
+    riverctl input "$input" drag-lock            enabled
+    riverctl input "$input" disable-while-typing enabled
+    riverctl input "$input" scroll-method        two-finger
+    riverctl input "$input" accel-profile        adaptive
+    riverctl input "$input" pointer-accel        0.0
+done
+
+# Autostart
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
+systemctl --user start graphical-session.target
+swaybg -c '#222222' &
+waybar &
+rivertile -view-padding 0 -outer-padding 0 -main-ratio 0.55 &

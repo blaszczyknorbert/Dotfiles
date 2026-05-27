@@ -1,0 +1,11 @@
+[Unit]
+Description=Mina first-run initialization
+After=graphical-session.target mako.service
+ConditionPathExists=%h/.local/state/mina/first-run-mode
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/mina-first-run
+
+[Install]
+WantedBy=graphical-session.target

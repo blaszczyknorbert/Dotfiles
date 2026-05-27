@@ -1,0 +1,15 @@
+[Unit]
+Description=Swayidle idle management daemon
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/swayidle -w \
+    timeout 300 'swaylock -f' \
+    before-sleep 'swaylock -f' \
+    lock 'swaylock -f'
+Restart=on-failure
+
+[Install]
+WantedBy=graphical-session.target
